@@ -1,0 +1,4 @@
+framework:
+    # Support consistency for POST without surprises.
+    # POST is POST, and POST with param _method un should not become as PATCH.
+    http_method_override: false

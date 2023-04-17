@@ -1,0 +1,6 @@
+framework:
+    php_errors:
+        # Logging of all errors by same usual way (datadog, etc.) is best practise for devops.
+        # On any way we can't catch all errors by framework
+        # especially startup errors, memory limit, timeout, fatal, etc.
+        log: false

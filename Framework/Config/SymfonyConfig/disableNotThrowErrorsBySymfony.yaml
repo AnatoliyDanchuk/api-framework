@@ -1,0 +1,5 @@
+framework:
+    php_errors:
+        # Support same behavior on local and on production to avoid surprises
+        # like "catch" is processed on local, and is ignored on production
+        throw: true

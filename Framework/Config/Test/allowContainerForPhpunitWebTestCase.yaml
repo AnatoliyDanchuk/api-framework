@@ -1,0 +1,8 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # It is temporary solution, till phpunit will not fix his code, or we fix it by self.
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'

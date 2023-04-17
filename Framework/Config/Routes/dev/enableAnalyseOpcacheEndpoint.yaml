@@ -1,0 +1,3 @@
+AnalyseOpcacheEndpoint:
+    resource: ../../../Endpoint/BundleEndpoint/AnalyseOpcacheEndpoint.php
+    type: HttpEndpoint
