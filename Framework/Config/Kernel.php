@@ -17,7 +17,10 @@ final class Kernel extends BaseKernel
 
     private ConfigLoader $configLoader;
 
-    public function __construct(string $environment)
+    public function __construct(
+        private ComposerLoader $composerLoader,
+        string $environment,
+    )
     {
         $debug = $environment === 'dev';
 
@@ -33,17 +36,17 @@ final class Kernel extends BaseKernel
 
     public function getProjectDir(): string
     {
-        return realpath(__DIR__ . '/../..');
+        return $this->composerLoader->getProjectRoot();
     }
 
     public function getLogDir(): string
     {
-        return $this->getProjectDir().'/var/unused_log_dir';
+        return $this->composerLoader->getVarRoot() . '/unused_log_dir';
     }
 
     public function getCacheDir(): string
     {
-        return $this->getProjectDir().'/var/cache';
+        return $this->composerLoader->getVarRoot() . '/cache';
     }
 
     public function registerBundles(): iterable
@@ -60,8 +63,7 @@ final class Kernel extends BaseKernel
             __DIR__ . '/SymfonyConfig',
             __DIR__ . '/Test',
         ]);
-
-        (new Configurator())->configureAllServices($container->services());
+        (new Configurator($this->composerLoader))->configureAllServices($container->services());
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
@@ -72,7 +74,7 @@ final class Kernel extends BaseKernel
 
         $endpointLocations = [
             __DIR__ . '/../../Framework/Endpoint/BundleEndpoint/CheckHealthEndpoint.php',
-            __DIR__ . '/../../Api/Endpoint/',
+            $this->composerLoader->getProjectRoot() . '/Api/Endpoint/',
         ];
         foreach ($endpointLocations as $endpointLocation) {
             $routes->import($endpointLocation, HttpEndpoint::class);

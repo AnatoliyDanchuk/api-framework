@@ -1,11 +1,13 @@
 <?php
 
+use Framework\Config\ComposerLoader;
 use Framework\Config\Kernel;
 use Symfony\Component\HttpFoundation\Request;
 
-require dirname(__DIR__).'/../var/vendor/autoload.php';
+require __DIR__ . '/../Config/ComposerLoader.php';
+$composerLoader = ComposerLoader::initComposer();
 
-$kernel = new Kernel($_ENV['APP_ENV']);
+$kernel = new Kernel($composerLoader, $_ENV['APP_ENV']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

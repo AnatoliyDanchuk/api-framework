@@ -2,18 +2,25 @@
 
 namespace Framework\Config\Services;
 
+use Framework\Config\ComposerLoader;
 use Framework\Endpoint\EndpointServiceLocator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 final class ApplicationConfigurator
 {
+    public function __construct(
+        private ComposerLoader $composerLoader,
+    )
+    {
+    }
+
     public function configure(ServicesConfigurator $servicesConfigurator): void
     {
-        $servicesConfigurator->load('Domain\\', __DIR__ . '/../../../Domain/');
-        $servicesConfigurator->load('DomainAdapter\\', __DIR__ . '/../../../DomainAdapter/')
-            ->exclude(__DIR__ . '/../../../DomainAdapter/DataProvider');
-        $servicesConfigurator->load('Api\\', __DIR__ . '/../../../Api/')
+        $servicesConfigurator->load('Domain\\', $this->composerLoader->getProjectRoot() . '/Domain/');
+        $servicesConfigurator->load('DomainAdapter\\', $this->composerLoader->getProjectRoot() . '/DomainAdapter/')
+            ->exclude($this->composerLoader->getProjectRoot() . '/DomainAdapter/DataProvider');
+        $servicesConfigurator->load('Api\\', $this->composerLoader->getProjectRoot() . '/Api/')
             ->public();
 
         $this->enableApplicationFactories($servicesConfigurator);
@@ -22,8 +29,8 @@ final class ApplicationConfigurator
     private function enableApplicationFactories(ServicesConfigurator $servicesConfigurator): void
     {
         $directories = [
-            __DIR__ . '/../../../Api/EndpointParamSpecification',
-            __DIR__ . '/../../../Api/CombinedEndpointParamSpecification',
+            $this->composerLoader->getProjectRoot() . '/Api/EndpointParamSpecification',
+            $this->composerLoader->getProjectRoot() . '/Api/CombinedEndpointParamSpecification',
         ];
 
         $endpointServiceLocator = new EndpointServiceLocator();
@@ -35,7 +42,7 @@ final class ApplicationConfigurator
             ));
 
             $replacement = [
-                __DIR__ . '/../../../' => '',
+                $this->composerLoader->getProjectRoot() => '',
                 '.php' => '',
                 '/' => '\\',
             ];
