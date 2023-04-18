@@ -5,8 +5,7 @@ namespace Framework\Config;
 final class ComposerLoader
 {
     private const LIBRARY_ROOT = __DIR__ . '/../..';
-//    private const VENDOR_ROOT = self::LIBRARY_ROOT . '/../..';
-    private const VENDOR_ROOT = self::LIBRARY_ROOT . '/vendor';
+    private const VENDOR_ROOT = self::LIBRARY_ROOT . '/../..';
     private const VAR_ROOT = self::VENDOR_ROOT . '/..';
     private const PROJECT_ROOT = self::VAR_ROOT . '/..';
 

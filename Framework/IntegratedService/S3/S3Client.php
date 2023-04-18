@@ -61,8 +61,8 @@ class S3Client
 
     public function putObject(array $args = []): void
     {
-//        $this->awsS3->putObject($args + [
-//            'Bucket' => $this->bucket,
-//        ]);
+        $this->awsS3->putObject($args + [
+            'Bucket' => $this->bucket,
+        ]);
     }
 }
