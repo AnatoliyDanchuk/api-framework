@@ -1,0 +1,19 @@
+name: api-framework
+
+services:
+  php:
+    container_name: api_framework_php
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM php:8-cli
+        RUN pecl install xdebug \
+          && docker-php-ext-enable xdebug
+        RUN mkdir /app
+        RUN chmod -R 777 /app
+        WORKDIR /app
+        COPY --from=composer /usr/bin/composer /usr/bin/composer
+    working_dir: /app
+    command: php -S localhost:8008
+    volumes:
+      - .:/app
