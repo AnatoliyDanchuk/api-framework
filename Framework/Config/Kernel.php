@@ -20,6 +20,7 @@ final class Kernel extends BaseKernel
     public function __construct(
         private ComposerLoader $composerLoader,
         string $environment,
+        private bool $forRunTests,
     )
     {
         $debug = $environment === 'dev';
@@ -63,7 +64,7 @@ final class Kernel extends BaseKernel
             __DIR__ . '/SymfonyConfig',
             __DIR__ . '/Test',
         ]);
-        (new Configurator($this->composerLoader))->configureAllServices($container->services());
+        (new Configurator($this->composerLoader, $this->forRunTests))->configureAllServices($container->services());
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void

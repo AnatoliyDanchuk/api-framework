@@ -2,6 +2,8 @@
 
 namespace Framework\Config;
 
+use Composer\Autoload\ClassLoader;
+
 final class ComposerLoader
 {
     private const LIBRARY_ROOT = __DIR__ . '/../..';
@@ -12,11 +14,13 @@ final class ComposerLoader
     public static function initComposer(): self
     {
         $autoloadFile = self::VENDOR_ROOT . '/autoload.php';
-        require realpath($autoloadFile);
-        return new self();
+        $composer = require_once realpath($autoloadFile);
+        return new self($composer);
     }
 
-    private function __construct()
+    private function __construct(
+        private readonly ClassLoader $composer
+    )
     {
     }
 
@@ -28,5 +32,10 @@ final class ComposerLoader
     public function getProjectRoot(): string
     {
         return realpath(self::PROJECT_ROOT);
+    }
+
+    public function getComposer(): ClassLoader
+    {
+        return $this->composer;
     }
 }

@@ -8,7 +8,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurat
 final class Configurator
 {
     public function __construct(
-        private ComposerLoader $composerLoader,
+        private readonly ComposerLoader $composerLoader,
+        private readonly bool $forRunTests,
     )
     {
     }
@@ -21,6 +22,8 @@ final class Configurator
 
         (new FrameworkConfigurator())->configure($servicesConfigurator);
         (new ApplicationConfigurator($this->composerLoader))->configure($servicesConfigurator);
-        (new TestConfigurator())->configure($servicesConfigurator);
+        if ($this->forRunTests) {
+            (new TestConfigurator())->configure($servicesConfigurator);
+        }
     }
 }

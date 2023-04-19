@@ -14,7 +14,7 @@ if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
 require __DIR__ . '/../Config/ComposerLoader.php';
 $composerLoader = ComposerLoader::initComposer();
 
-$kernel = new Kernel($composerLoader, $_ENV['APP_ENV']);
+$kernel = new Kernel($composerLoader, $_ENV['APP_ENV'], false);
 $application = new Application($kernel);
 $input = new ArgvInput();
 $application->run($input);
