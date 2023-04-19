@@ -11,17 +11,13 @@ final class ComposerLoader
     private const VAR_ROOT = self::VENDOR_ROOT . '/..';
     private const PROJECT_ROOT = self::VAR_ROOT . '/..';
 
+    private static ClassLoader $composer;
+
     public static function initComposer(): self
     {
         $autoloadFile = self::VENDOR_ROOT . '/autoload.php';
-        $composer = require_once realpath($autoloadFile);
-        return new self($composer);
-    }
-
-    private function __construct(
-        private readonly ClassLoader $composer
-    )
-    {
+        self::$composer ??= require_once realpath($autoloadFile);
+        return new self();
     }
 
     public function getVarRoot(): string
@@ -36,6 +32,6 @@ final class ComposerLoader
 
     public function getComposer(): ClassLoader
     {
-        return $this->composer;
+        return self::$composer;
     }
 }
