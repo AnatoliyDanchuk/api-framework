@@ -16,7 +16,7 @@ final class ComposerLoader
     public static function initComposer(): self
     {
         $autoloadFile = self::VENDOR_ROOT . '/autoload.php';
-        self::$composer ??= require_once realpath($autoloadFile);
+        self::$composer ??= require realpath($autoloadFile);
         return new self();
     }
 
