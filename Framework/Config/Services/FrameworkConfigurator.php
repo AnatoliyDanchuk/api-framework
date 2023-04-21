@@ -30,7 +30,7 @@ final class FrameworkConfigurator
             ->tag('kernel.event_listener', ['event' => KernelEvents::EXCEPTION]);
 
         $servicesConfigurator->load('Framework\\', __DIR__ . '/../../../Framework/')
-            ->exclude(__DIR__ . '/../../../Framework/'.'{entrypoint}/*');
+            ->exclude(__DIR__ . '/../../../Framework/'.'{entrypoint,Test}/*');
 
         $servicesConfigurator->load('Framework\\Endpoint\\', __DIR__ . '/../../../Framework/Endpoint/*')
             ->exclude(__DIR__ . '/../../../Framework/Endpoint/EndpointInput/*')

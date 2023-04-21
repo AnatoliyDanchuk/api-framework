@@ -45,7 +45,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Framework\\": "Framework/"
+            "Framework\\": "Framework/",
+            "Test\\TestTemplate\\": "Test/TestTemnplate/"
         }
     }
 }
