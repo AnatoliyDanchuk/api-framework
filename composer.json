@@ -29,9 +29,7 @@
         "symfony/intl": "*",
         "symfony/proxy-manager-bridge": "*",
         "symfony/validator": "*",
-        "symfony/yaml": "*"
-    },
-    "require-dev": {
+        "symfony/yaml": "*",
         "amnuts/opcache-gui": "3.2.1",
         "liuggio/fastest": "^1.8",
         "symfony/test-pack": "^1.0"
