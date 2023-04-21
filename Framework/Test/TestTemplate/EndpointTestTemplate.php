@@ -2,9 +2,7 @@
 
 namespace Framework\Test\TestTemplate;
 
-use Framework\Test\TestTemplate\PhpunitExtension\WebTestTemplate;
-
-abstract class EndpointTestTemplate extends WebTestTemplate
+abstract class EndpointTestTemplate extends FrameworkWebTestTemplate
 {
     final public function testSuccessRequest(): void
     {
