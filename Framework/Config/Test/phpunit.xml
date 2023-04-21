@@ -16,16 +16,16 @@
     </php>
     <testsuites>
         <testsuite name="Endpoint">
-            <directory>../../../../../Test/TestImplementation/Endpoint</directory>
+            <directory>../../../../../../Test/TestImplementation/Endpoint</directory>
         </testsuite>
     </testsuites>
     <coverage
         cacheDirectory="../../../../../var/.phpunit.cache/code-coverage"
     >
         <include>
-            <directory suffix=".php">../../../../../Api</directory>
-            <directory suffix=".php">../../../../../Domain</directory>
-            <directory suffix=".php">../../../../../DomainAdapter</directory>
+            <directory suffix=".php">../../../../../../Api</directory>
+            <directory suffix=".php">../../../../../../Domain</directory>
+            <directory suffix=".php">../../../../../../DomainAdapter</directory>
             <directory suffix=".php">../../../Framework</directory>
         </include>
         <report>
