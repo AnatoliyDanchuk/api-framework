@@ -1,8 +1,7 @@
 <?php
 
-namespace Framework\IntegratedService\Magento\Service;
+namespace Framework\IntegratedService\Magento;
 
-use Framework\IntegratedService\Magento\CustomMagentoOAuthCredentials;
 use Framework\JsonCoder\JsonDecoder;
 use OAuth;
 use OAuthException;

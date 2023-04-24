@@ -2,8 +2,6 @@
 
 namespace Framework\IntegratedService\Magento;
 
-use Framework\IntegratedService\Magento\Service\MagentoOAuthCredentialsInterface;
-
 final class CustomMagentoOAuthCredentials implements MagentoOAuthCredentialsInterface
 {
     private string $consumer_key;

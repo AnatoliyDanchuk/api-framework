@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\IntegratedService\Magento\Service;
+namespace Framework\IntegratedService\Magento;
 
 final class MagentoApiJsonEncoder
 {
