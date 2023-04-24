@@ -30,7 +30,17 @@ final class FrameworkConfigurator
             ->tag('kernel.event_listener', ['event' => KernelEvents::EXCEPTION]);
 
         $servicesConfigurator->load('Framework\\', __DIR__ . '/../../../Framework/')
-            ->exclude(__DIR__ . '/../../../Framework/'.'{entrypoint,Test}/*');
+            ->exclude(__DIR__ . '/../../../Framework/'.'{entrypoint,Test,Config,Endpoint,Exception,IntegratedService}/*');
+
+        $servicesConfigurator->load('Framework\\Config\\Routes\\', __DIR__ . '/../../../Framework/Config/Routes/');
+
+        foreach (new \DirectoryIterator(__DIR__ . '/../../../Framework/IntegratedService') as $fileInfo) {
+            if ($fileInfo->isDot()) {
+                continue;
+            }
+            $dirname = $fileInfo->getFilename();
+            $servicesConfigurator->load("Framework\\IntegratedService\\$dirname\\Service", __DIR__ . "/../../../Framework/IntegratedService/$dirname/Service");
+        }
 
         $servicesConfigurator->load('Framework\\Endpoint\\', __DIR__ . '/../../../Framework/Endpoint/*')
             ->exclude(__DIR__ . '/../../../Framework/Endpoint/EndpointInput/*')

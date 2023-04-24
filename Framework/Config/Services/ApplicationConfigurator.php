@@ -17,7 +17,7 @@ final class ApplicationConfigurator
 
     public function configure(ServicesConfigurator $servicesConfigurator): void
     {
-        $servicesConfigurator->load('Domain\\', $this->composerLoader->getProjectRoot() . '/Domain/');
+        $servicesConfigurator->load('Domain\\Service\\', $this->composerLoader->getProjectRoot() . '/Domain/Service');
         $servicesConfigurator->load('DomainAdapter\\', $this->composerLoader->getProjectRoot() . '/DomainAdapter/')
             ->exclude($this->composerLoader->getProjectRoot() . '/DomainAdapter/DataProvider');
         $servicesConfigurator->load('Api\\', $this->composerLoader->getProjectRoot() . '/Api/')

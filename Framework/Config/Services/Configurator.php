@@ -16,14 +16,15 @@ final class Configurator
 
     public function configureAllServices(ServicesConfigurator $servicesConfigurator): void
     {
-        $servicesConfigurator->defaults()
+        $defaultsConfigurator = $servicesConfigurator->defaults()
             ->autowire()
             ->autoconfigure();
 
+        if ($this->forRunTests) {
+            $defaultsConfigurator->public();
+        }
+
         (new FrameworkConfigurator())->configure($servicesConfigurator);
         (new ApplicationConfigurator($this->composerLoader))->configure($servicesConfigurator);
-        if ($this->forRunTests) {
-            (new TestConfigurator())->configure($servicesConfigurator);
-        }
     }
 }

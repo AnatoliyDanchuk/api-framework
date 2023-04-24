@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\IntegratedService\S3\Command;
+namespace Framework\IntegratedService\S3\Service\Command;
 
-use Framework\IntegratedService\S3\S3Client;
+use Framework\IntegratedService\S3\Service\S3Client;
 
 class PutFileCommand
 {

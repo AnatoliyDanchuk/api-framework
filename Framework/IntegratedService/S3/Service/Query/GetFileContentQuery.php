@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\IntegratedService\S3\Query;
+namespace Framework\IntegratedService\S3\Service\Query;
 
 use Aws\S3\Exception\S3Exception;
 use Framework\IntegratedService\S3\Exception\S3FileNotFound;
-use Framework\IntegratedService\S3\S3Client;
+use Framework\IntegratedService\S3\Service\S3Client;
 
 final class GetFileContentQuery
 {

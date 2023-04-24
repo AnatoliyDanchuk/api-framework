@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\IntegratedService\S3\Query\Csv;
+namespace Framework\IntegratedService\S3\Service\Query\Csv;
 
 final class GetColumnValuesQuery
 {
