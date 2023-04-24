@@ -39,6 +39,9 @@ final class FrameworkConfigurator
                 continue;
             }
             $dirname = $fileInfo->getFilename();
+            if (!is_dir(__DIR__ . "/../../../Framework/IntegratedService/$dirname/Service/$dirname")) {
+                continue;
+            }
             $servicesConfigurator->load("Framework\\IntegratedService\\$dirname\\Service\\", __DIR__ . "/../../../Framework/IntegratedService/$dirname/Service/");
         }
 
