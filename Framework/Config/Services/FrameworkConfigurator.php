@@ -39,7 +39,7 @@ final class FrameworkConfigurator
                 continue;
             }
             $dirname = $fileInfo->getFilename();
-            $servicesConfigurator->load("Framework\\IntegratedService\\$dirname\\Service", __DIR__ . "/../../../Framework/IntegratedService/$dirname/Service");
+            $servicesConfigurator->load("Framework\\IntegratedService\\$dirname\\Service\\", __DIR__ . "/../../../Framework/IntegratedService/$dirname/Service/");
         }
 
         $servicesConfigurator->load('Framework\\Endpoint\\', __DIR__ . '/../../../Framework/Endpoint/*')
