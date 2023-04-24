@@ -1,11 +1,10 @@
 <?php
 
-namespace Framework\IntegratedService\S3\Service;
+namespace Framework\IntegratedService\S3;
 
 use Aws\Result;
 use Aws\S3\S3Client as AwsS3;
 use Aws\S3\S3MultiRegionClient;
-use Framework\IntegratedService\S3\S3Config;
 
 /**
  * @final
