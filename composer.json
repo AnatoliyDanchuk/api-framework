@@ -43,7 +43,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Framework\\": "Framework/"
+            "Framework\\": "Framework/",
+            "Domain\\": "../../../../Domain/",
+            "DomainAdapter\\": "../../../../DomainAdapter/",
+            "Api\\": "../../../../Api/"
         }
     }
 }

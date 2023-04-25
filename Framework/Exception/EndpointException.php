@@ -2,8 +2,6 @@
 
 namespace Framework\Exception;
 
-use Domain\Exception\DomainException;
-
 final class EndpointException extends FrameworkException
 {
     private array $appliedInput;

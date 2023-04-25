@@ -2,7 +2,7 @@
 
 namespace Framework\ResponseBuilder;
 
-use Domain\Exception\DomainException;
+use Framework\Exception\DomainException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ExceptionResponseBuilder extends ResponseBuilderTemplate

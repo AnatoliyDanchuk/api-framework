@@ -2,7 +2,7 @@
 
 namespace Framework\ExceptionHandler;
 
-use Domain\Exception\DomainException;
+use Framework\Exception\DomainException;
 use Framework\Endpoint\EndpointInitializer;
 use Framework\ResponseBuilder\ExceptionResponseBuilder;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
