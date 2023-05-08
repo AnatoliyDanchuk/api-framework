@@ -1,0 +1,30 @@
+#name: image-optimizer
+
+services:
+  web_server:
+    container_name: image-optimizer-web-server
+    image: nginx:alpine
+    networks:
+      - image-optimizer-internal
+    depends_on:
+      - php_application
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./favicon.ico:/var/www/favicon.ico
+    ports:
+      - "8002:80"
+
+  php_application:
+    container_name: image-optimizer-php-application
+    build:
+      context: ../..
+      dockerfile: ./Docker/base/Dockerfile
+    networks:
+      - image-optimizer-internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+networks:
+  image-optimizer-internal:
+    name: image-optimizer-internal

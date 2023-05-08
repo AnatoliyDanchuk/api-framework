@@ -2,7 +2,7 @@
 
 namespace Framework\ExceptionHandler;
 
-use Framework\Endpoint\BundleEndpoint\CheckHealthEndpoint;
+use Framework\Endpoint\BundleEndpoint\HelpEndpoint;
 use Framework\Endpoint\EndpointParamSpecification\EndpointParamSpecificationIdentifier;
 use Framework\Endpoint\EndpointParamSpecification\EndpointParamSpecification;
 use Framework\Endpoint\EndpointTemplate\ApplicationHttpEndpoint;
@@ -20,7 +20,7 @@ final class InvalidHttpPathHandler implements ExceptionHandlerInterface
 {
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly CheckHealthEndpoint $helpEndpoint,
+        private readonly HelpEndpoint $helpEndpoint,
         private readonly InvalidHttpRequestResponseBuilder $responseBuilder,
         private readonly RouterInterface $router,
         private readonly ContainerInterface $serviceProvider,

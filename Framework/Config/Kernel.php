@@ -4,6 +4,7 @@ namespace Framework\Config;
 
 use Framework\Config\Services\Configurator;
 use Framework\Endpoint\EndpointTemplate\HttpEndpoint;
+use Nelmio\ApiDocBundle\NelmioApiDocBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -54,6 +55,7 @@ final class Kernel extends BaseKernel
     {
         return [
             new FrameworkBundle(),
+            new NelmioApiDocBundle(),
         ];
     }
 
@@ -70,11 +72,12 @@ final class Kernel extends BaseKernel
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $this->configLoader->importConfigs($routes, $this->environment, [
-            'Routes',
+            __DIR__ . '/../../Framework/Config/Routes',
         ]);
 
         $endpointLocations = [
             __DIR__ . '/../../Framework/Endpoint/BundleEndpoint/CheckHealthEndpoint.php',
+            __DIR__ . '/../../Framework/Endpoint/BundleEndpoint/HelpEndpoint.php',
             $this->composerLoader->getProjectRoot() . '/Api/Endpoint/',
         ];
         foreach ($endpointLocations as $endpointLocation) {

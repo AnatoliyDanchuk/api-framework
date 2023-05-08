@@ -2,7 +2,7 @@
 
 namespace Framework\ExceptionHandler;
 
-use Framework\Endpoint\BundleEndpoint\CheckHealthEndpoint;
+use Framework\Endpoint\BundleEndpoint\HelpEndpoint;
 use Framework\Exception\InvalidEndpointInputException;
 use Framework\ResponseBuilder\InvalidHttpRequestResponseBuilder;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -12,11 +12,11 @@ final class InvalidEndpointInputHandler implements ExceptionHandlerInterface
 {
     private UrlGeneratorInterface $urlGenerator;
     private InvalidHttpRequestResponseBuilder $responseBuilder;
-    private CheckHealthEndpoint $helpEndpoint;
+    private HelpEndpoint $helpEndpoint;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
-        CheckHealthEndpoint $helpEndpoint,
+        HelpEndpoint $helpEndpoint,
         InvalidHttpRequestResponseBuilder $responseBuilder
     ) {
         $this->helpEndpoint = $helpEndpoint;

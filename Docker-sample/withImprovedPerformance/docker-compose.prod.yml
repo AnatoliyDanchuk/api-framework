@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  php_application:
+    build:
+      args:
+        - APP_ENV=prod
+    volumes:
+      - ../withImprovedPerformance/php.ini:/usr/local/etc/php/conf.d/withImprovedPerformance.ini
+      - ../withImprovedPerformance/preload.php:/opt/symfony/preload.php

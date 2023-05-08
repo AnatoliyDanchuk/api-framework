@@ -22,17 +22,18 @@
         "ext-intl": "*",
         "ext-mbstring": "*",
         "ext-oauth": "*",
+        "amnuts/opcache-gui": "3.2.1",
         "aws/aws-sdk-php": "*",
+        "liuggio/fastest": "^1.8",
+        "nelmio/api-doc-bundle": "^4.11",
         "symfony/console": "*",
         "symfony/expression-language": "*",
         "symfony/framework-bundle": "*",
         "symfony/intl": "*",
         "symfony/proxy-manager-bridge": "*",
+        "symfony/test-pack": "^1.0",
         "symfony/validator": "*",
-        "symfony/yaml": "*",
-        "amnuts/opcache-gui": "3.2.1",
-        "liuggio/fastest": "^1.8",
-        "symfony/test-pack": "^1.0"
+        "symfony/yaml": "*"
     },
     "config": {
         "process-timeout": 0,

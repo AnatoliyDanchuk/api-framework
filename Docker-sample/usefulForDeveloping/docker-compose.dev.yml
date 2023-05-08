@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  php_application:
+    build:
+      args:
+        - APP_ENV=dev
+        - FOR_RUN_TESTS=1
+    volumes:
+      - ../..:/var/www
+      - ../usefulForDeveloping/php.ini:/usr/local/etc/php/conf.d/usefulForDeveloping.ini
+      # just for quick possibility to test php-fpm changes
+      - ../base/php-fpm.conf:/usr/local/etc/php-fpm.conf
+    environment:
+      # For macOS and Windows use host.docker.internal
+      # For other OS use 192.168.220.1
+      - XDEBUG_CONFIG=client_host=host.docker.internal
+
+#networks:
+#  internal:
+#    # for developers who use another host OS than macOS or Windows.
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: 192.168.220.0/28
