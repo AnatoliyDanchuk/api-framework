@@ -11,6 +11,7 @@ use Nelmio\ApiDocBundle\RouteDescriber\RouteDescriberInterface;
 use OpenApi\Annotations\Items;
 use OpenApi\Annotations\OpenApi;
 use OpenApi\Annotations\JsonContent;
+use OpenApi\Annotations\PathItem;
 use OpenApi\Annotations\Property;
 use OpenApi\Annotations\RequestBody;
 use Symfony\Component\Routing\Route;
@@ -30,16 +31,18 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
 
     public function describe(OpenApi $api, Route $route, \ReflectionMethod $reflectionMethod): void
     {
-        foreach ($api->paths as $pathItem) {
-            foreach ($route->getMethods() as $httpMethod) {
-                $operation = Util::getChild($pathItem, self::HTTP_METHOD_MAP[$httpMethod]);
-                $allParams = $this->getAllParams($route);
+        $pathItem = current(array_filter($api->paths, function (PathItem $pathItem) use ($route): bool {
+            return $pathItem->path === $route->getPath();
+        }));
 
-                /** @var EndpointParamSpecification[] $jsonBodyParams */
-                if ($jsonBodyParams = $allParams[JsonBodyParamPath::class]) {
-                    $jsonParamTree = $this->buildJsonParamTree($jsonBodyParams);
-                    $this->describeJsonRequestBody($jsonParamTree, $operation);
-                }
+        foreach ($route->getMethods() as $httpMethod) {
+            $operation = Util::getChild($pathItem, self::HTTP_METHOD_MAP[$httpMethod]);
+            $allParams = $this->getAllParams($route);
+
+            /** @var EndpointParamSpecification[] $jsonBodyParams */
+            if ($jsonBodyParams = $allParams[JsonBodyParamPath::class]) {
+                $jsonParamTree = $this->buildJsonParamTree($jsonBodyParams);
+                $this->describeJsonRequestBody($jsonParamTree, $operation);
             }
         }
     }
@@ -154,9 +157,9 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
 
         if (is_array($paramExample)) {
             $propertyAsValue = Util::createChild($parentItem, $childClass, $childPropertyNameSection + [
-                'type' => 'array',
-                'example' => $paramExample,
-            ]);
+                    'type' => 'array',
+                    'example' => $paramExample,
+                ]);
 
             // @reason: only 1 item can be applied. ApiDoc expected array has strong typed structure.
             $paramExampleItem = current($paramExample);
@@ -166,9 +169,9 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
             $propertyAsValue->merge($items);
         } elseif (is_object($paramExample)) {
             $propertyAsValue = Util::createChild($parentItem, $childClass, $childPropertyNameSection + [
-                'required' => array_keys(get_object_vars($paramExample)),
-                'type' => 'object',
-            ]);
+                    'required' => array_keys(get_object_vars($paramExample)),
+                    'type' => 'object',
+                ]);
 
             $itemProperties = [];
             foreach (get_object_vars($paramExample) as $key => $itemProperty) {
@@ -177,9 +180,9 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
             $propertyAsValue->merge($itemProperties);
         } else {
             $propertyAsValue = Util::createChild($parentItem, $childClass, $childPropertyNameSection + [
-                'type' => gettype($paramExample),
-                'example' => $paramExample,
-            ]);
+                    'type' => gettype($paramExample),
+                    'example' => $paramExample,
+                ]);
         }
 
         return $propertyAsValue;
