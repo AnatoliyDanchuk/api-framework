@@ -2,6 +2,7 @@
 
 namespace Framework\Config\Services;
 
+use Framework\Config\Routes\HttpEndpointDescriber;
 use Framework\Config\Routes\HttpEndpointLoader;
 use Framework\Endpoint\EndpointInitializer;
 use Framework\Endpoint\EndpointParamResolver;
@@ -78,5 +79,8 @@ final class FrameworkConfigurator
         $servicesConfigurator->set(HttpEndpointLoader::class)
             ->arg(ContainerInterface::class, service('service_container'))
             ->tag('routing.loader');
+
+        $servicesConfigurator->set(HttpEndpointDescriber::class)
+            ->tag('nelmio_api_doc.route_describer');
     }
 }
