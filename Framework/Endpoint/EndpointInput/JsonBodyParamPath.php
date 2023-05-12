@@ -2,6 +2,7 @@
 
 namespace Framework\Endpoint\EndpointInput;
 
+use Framework\Endpoint\EndpointParamSpecification\EndpointParamSpecification;
 use Framework\Endpoint\JsonRequestTransformer;
 
 final class JsonBodyParamPath extends ParamPath
@@ -28,5 +29,19 @@ final class JsonBodyParamPath extends ParamPath
         $attributeName = JsonRequestTransformer::REQUEST_ATTRIBUTE_JSON_CONTENT;
         $jsonItemPath = implode('?.', $this->paramPlacePath);
         return "request.attributes.get('$attributeName')?.$jsonItemPath !== null";
+    }
+
+    public function formatPathToDoc(EndpointParamSpecification $endpointParamSpecification): array
+    {
+        $tree = [];
+        $treeCursor = &$tree;
+        $path = $this->paramPlacePath;
+        $lastPathItem = array_pop($path);
+        foreach ($path as $item) {
+            $treeCursor[$item] ??= [];
+            $treeCursor = &$treeCursor[$item];
+        }
+        $treeCursor[$lastPathItem] = $endpointParamSpecification;
+        return $tree;
     }
 }

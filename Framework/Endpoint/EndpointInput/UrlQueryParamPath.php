@@ -25,4 +25,9 @@ final class UrlQueryParamPath extends ParamPath
     {
         return "request.query.has('" . $this->paramPlacePath . "')";
     }
+
+    public function formatPlacePathToDoc(): string
+    {
+        return $this->paramPlacePath;
+    }
 }

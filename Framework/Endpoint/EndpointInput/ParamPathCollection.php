@@ -15,4 +15,26 @@ final class ParamPathCollection
     {
         $this->paramPaths = $paramPaths ?: throw new ParamShouldBeAllowedSomewhereError();
     }
+
+    public function searchUrlQueryParamPath(): ?UrlQueryParamPath
+    {
+        foreach ($this->paramPaths as $paramPath) {
+            if ($paramPath instanceof UrlQueryParamPath) {
+                return $paramPath;
+            }
+        }
+
+        return null;
+    }
+
+    public function searchJsonBodyParamPath(): ?JsonBodyParamPath
+    {
+        foreach ($this->paramPaths as $paramPath) {
+            if ($paramPath instanceof JsonBodyParamPath) {
+                return $paramPath;
+            }
+        }
+
+        return null;
+    }
 }
