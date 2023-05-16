@@ -21,7 +21,7 @@ final class AnalyseOpcacheEndpoint implements ServiceHttpEndpoint
     public function execute(): Response
     {
         /** @noinspection SpellCheckingInspection */
-        $htmlReport = include __DIR__ . "/../../../var/vendor/amnuts/opcache-gui/index.php";
+        $htmlReport = include __DIR__ . "/../../../../../amnuts/opcache-gui/index.php";
         return new Response($htmlReport);
     }
 }
