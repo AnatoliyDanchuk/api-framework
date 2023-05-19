@@ -65,6 +65,7 @@ final class Kernel extends BaseKernel
             __DIR__ . '/SymfonyEnvSecret',
             __DIR__ . '/SymfonyConfig',
             __DIR__ . '/Test',
+            $this->composerLoader->getProjectRoot() . '/Framework/Config/SymfonyConfig/',
         ]);
         (new Configurator($this->composerLoader, $this->forRunTests))->configureAllServices($container->services());
     }
