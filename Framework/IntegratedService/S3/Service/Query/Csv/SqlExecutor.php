@@ -7,16 +7,15 @@ use GuzzleHttp\Psr7\Stream;
 
 final class SqlExecutor
 {
-    private S3Client $s3;
-
-    public function __construct(S3Client $s3Client)
+    public function __construct(
+        private readonly S3Client $s3Client,
+    )
     {
-        $this->s3 = $s3Client;
     }
 
     public function executeSql(string $key, string $sql, string $outputSerializationFormat): array
     {
-        $result = $this->s3->selectObjectContent([
+        $result = $this->s3Client->selectObjectContent([
             'Key' => $key,
             'ExpressionType' => 'SQL',
             'Expression' => $sql,

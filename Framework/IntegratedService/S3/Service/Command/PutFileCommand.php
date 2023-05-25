@@ -6,16 +6,15 @@ use Framework\IntegratedService\S3\Service\S3Client;
 
 class PutFileCommand
 {
-    private S3Client $s3;
-
-    public function __construct(S3Client $s3Client)
+    public function __construct(
+        private readonly S3Client $s3Client,
+    )
     {
-        $this->s3 = $s3Client;
     }
 
     public function putFile(string $key, string $content): void
     {
-        $this->s3->putObject([
+        $this->s3Client->putObject([
             'Key' => $key,
             'Body' => $content,
         ]);

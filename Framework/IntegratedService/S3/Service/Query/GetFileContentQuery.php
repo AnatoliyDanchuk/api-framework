@@ -8,17 +8,16 @@ use Framework\IntegratedService\S3\Service\S3Client;
 
 final class GetFileContentQuery
 {
-    private S3Client $s3;
-
-    public function __construct(S3Client $s3Client)
+    public function __construct(
+        private readonly S3Client $s3Client,
+    )
     {
-        $this->s3 = $s3Client;
     }
 
     public function getFileContent(string $key): string
     {
         try {
-            return $this->s3->getObject([
+            return $this->s3Client->getObject([
                 'Key' => $key,
             ])->get('Body');
         } catch (S3Exception $exception) {

@@ -12,19 +12,12 @@ use Aws\Credentials\Credentials;
  */
 class S3ConfigProvider
 {
-    private Credentials $credentials;
-    private string $region;
-    private string $bucket;
-
     public function __construct(
-        Credentials $credentials,
-        string $region,
-        string $bucket
+        private readonly Credentials $credentials,
+        private readonly string $region,
+        private readonly string $bucket,
     )
     {
-        $this->credentials = $credentials;
-        $this->region = $region;
-        $this->bucket = $bucket;
     }
 
     public function getCredentials(): Credentials
