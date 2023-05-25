@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\IntegratedService\Messenger;
+namespace Framework\IntegratedService\Messenger\Service;
 
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;

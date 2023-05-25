@@ -1,7 +1,7 @@
 framework:
   messenger:
     serializer:
-      default_serializer: Framework\IntegratedService\Messenger\LazyServiceSerializer
+      default_serializer: Framework\IntegratedService\Messenger\Service\LazyServiceSerializer
       symfony_serializer:
         format: json
         context: { }

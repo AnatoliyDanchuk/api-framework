@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\IntegratedService\Messenger;
+namespace Framework\IntegratedService\Messenger\Service;
 
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
