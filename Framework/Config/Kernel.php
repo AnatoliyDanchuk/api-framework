@@ -65,7 +65,7 @@ final class Kernel extends BaseKernel
             __DIR__ . '/SymfonyEnvSecret',
             __DIR__ . '/SymfonyConfig',
             __DIR__ . '/Test',
-            $this->composerLoader->getProjectRoot() . '/Framework/Config/SymfonyConfig/',
+            $this->composerLoader->getProjectRoot() . '/Framework/Config/SymfonyConfig',
         ]);
         (new Configurator($this->composerLoader, $this->forRunTests))->configureAllServices($container->services());
     }
@@ -79,7 +79,7 @@ final class Kernel extends BaseKernel
         $endpointLocations = [
             __DIR__ . '/../../Framework/Endpoint/BundleEndpoint/CheckHealthEndpoint.php',
             __DIR__ . '/../../Framework/Endpoint/BundleEndpoint/HelpEndpoint.php',
-            $this->composerLoader->getProjectRoot() . '/Api/Endpoint/',
+            $this->composerLoader->getProjectRoot() . '/Api/Endpoint/*',
         ];
         foreach ($endpointLocations as $endpointLocation) {
             $routes->import($endpointLocation, HttpEndpoint::class);
