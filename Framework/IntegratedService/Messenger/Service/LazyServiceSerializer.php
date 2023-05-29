@@ -8,7 +8,6 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 use Symfony\Component\Serializer\SerializerInterface as SymfonySerializerInterface;
 
@@ -21,7 +20,6 @@ class LazyServiceSerializer extends Serializer
             new DateTimeNormalizer(),
             new ArrayDenormalizer(),
             new LazyServiceNormalizer(),
-            new PropertyNormalizer(),
             new ObjectNormalizer(),
         ];
         $serializer = new SymfonySerializer($normalizers, $encoders);

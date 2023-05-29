@@ -1,6 +1,6 @@
 FROM php:8-cli
 RUN apt-get update
-RUN apt-get install -y unzip git
+RUN apt-get install -y unzip git libicu-dev
 RUN docker-php-ext-configure intl \
   && docker-php-ext-install intl \
   && docker-php-ext-install oauth
