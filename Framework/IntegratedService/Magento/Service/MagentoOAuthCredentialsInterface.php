@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\IntegratedService\Magento;
+namespace Framework\IntegratedService\Magento\Service;
 
 interface MagentoOAuthCredentialsInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\IntegratedService\Magento;
+namespace Framework\IntegratedService\Magento\Service;
 
 use Framework\JsonCoder\JsonDecoder;
 use OAuth;
