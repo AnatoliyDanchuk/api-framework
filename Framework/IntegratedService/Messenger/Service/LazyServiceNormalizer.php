@@ -2,6 +2,7 @@
 
 namespace Framework\IntegratedService\Messenger\Service;
 
+use Aws\S3\S3Client;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
@@ -11,6 +12,11 @@ class LazyServiceNormalizer extends PropertyNormalizer implements NormalizerInte
 {
     public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
+        // Memory limit when sending service to messenger.There are not necessary to send it.
+        if ($object instanceof S3Client) {
+            return null;
+        }
+
         if ($object instanceof LazyObjectInterface) {
             $object = $object->initializeLazyObject();
         }

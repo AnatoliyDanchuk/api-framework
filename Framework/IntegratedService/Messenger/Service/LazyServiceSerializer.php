@@ -5,6 +5,7 @@ namespace Framework\IntegratedService\Messenger\Service;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -19,7 +20,11 @@ class LazyServiceSerializer extends Serializer
         $normalizers = [
             new DateTimeNormalizer(),
             new ArrayDenormalizer(),
-            new LazyServiceNormalizer(),
+            new LazyServiceNormalizer(defaultContext: [
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                    return [];
+                },
+            ]),
             new ObjectNormalizer(),
         ];
         $serializer = new SymfonySerializer($normalizers, $encoders);
