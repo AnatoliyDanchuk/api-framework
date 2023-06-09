@@ -6,4 +6,5 @@ enum ParamPlace
 {
     case UrlQuery;
     case JsonBody;
+    case MultipartBody;
 }

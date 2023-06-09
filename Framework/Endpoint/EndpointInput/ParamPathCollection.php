@@ -27,6 +27,17 @@ final class ParamPathCollection
         return null;
     }
 
+    public function searchMultipartBodyParamPath(): ?MultipartBodyParamPath
+    {
+        foreach ($this->paramPaths as $paramPath) {
+            if ($paramPath instanceof MultipartBodyParamPath) {
+                return $paramPath;
+            }
+        }
+
+        return null;
+    }
+
     public function searchJsonBodyParamPath(): ?JsonBodyParamPath
     {
         foreach ($this->paramPaths as $paramPath) {

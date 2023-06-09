@@ -2,7 +2,9 @@
 
 namespace Framework\Endpoint\EndpointInput;
 
-final class UrlQueryParamPath extends ParamPath
+use Framework\Endpoint\EndpointParamSpecification\EndpointParamSpecification;
+
+final class MultipartBodyParamPath extends ParamPath
 {
     public function __construct(
         private readonly string $paramPlacePath,
@@ -13,17 +15,17 @@ final class UrlQueryParamPath extends ParamPath
 
     protected function getParamPlace(): ParamPlace
     {
-        return ParamPlace::UrlQuery;
+        return ParamPlace::MultipartBody;
     }
 
     protected function formatPlacePathToLog(): array
     {
-        return ['urlQueryParamName' => $this->paramPlacePath];
+        return ['multipartBodyParamName' => $this->paramPlacePath];
     }
 
     public function getRouteCondition(): string
     {
-        return "request.query.has('" . $this->paramPlacePath . "')";
+        return "request.request.has('" . $this->paramPlacePath . "')";
     }
 
     public function formatPathToDoc(): string

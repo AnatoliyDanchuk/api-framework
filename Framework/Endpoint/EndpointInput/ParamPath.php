@@ -26,4 +26,6 @@ abstract class ParamPath
     abstract protected function formatPlacePathToLog(): array;
 
     abstract public function getRouteCondition(): string;
+
+    abstract public function formatPathToDoc(): string|array;
 }

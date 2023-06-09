@@ -4,6 +4,7 @@ namespace Framework\Config\Routes;
 
 use Framework\Endpoint\CombinedEndpointParamSpecifications\CombinedEndpointParamSpecification;
 use Framework\Endpoint\EndpointInput\JsonBodyParamPath;
+use Framework\Endpoint\EndpointInput\MultipartBodyParamPath;
 use Framework\Endpoint\EndpointInput\UrlQueryParamPath;
 use Framework\Endpoint\EndpointParamSpecification\EndpointParamSpecification;
 use Nelmio\ApiDocBundle\OpenApiPhp\Util;
@@ -11,6 +12,7 @@ use Nelmio\ApiDocBundle\RouteDescriber\RouteDescriberInterface;
 use OpenApi\Annotations\Items;
 use OpenApi\Annotations\OpenApi;
 use OpenApi\Annotations\JsonContent;
+use OpenApi\Annotations\Parameter;
 use OpenApi\Annotations\PathItem;
 use OpenApi\Annotations\Property;
 use OpenApi\Annotations\RequestBody;
@@ -39,10 +41,14 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
             $operation = Util::getChild($pathItem, self::HTTP_METHOD_MAP[$httpMethod]);
             $allParams = $this->getAllParams($route);
 
-            /** @var EndpointParamSpecification[] $jsonBodyParams */
-            if ($jsonBodyParams = $allParams[JsonBodyParamPath::class]) {
-                $jsonParamTree = $this->buildJsonParamTree($jsonBodyParams);
-                $this->describeJsonRequestBody($jsonParamTree, $operation);
+            if ($paramsWithUrlQueryPath = $allParams[UrlQueryParamPath::class] ?? []) {
+                $this->describeParameters($operation, 'query', ...$paramsWithUrlQueryPath);
+            }
+
+            if ($paramsWithJsonBodyPath = $allParams[JsonBodyParamPath::class] ?? []) {
+                $this->describeJsonRequestBody($operation, ...$paramsWithJsonBodyPath);
+            } elseif ($paramsWithMultipartBodyPath = $allParams[MultipartBodyParamPath::class] ?? []) {
+                $this->describeParameters($operation, 'body', ...$paramsWithMultipartBodyPath);
             }
         }
     }
@@ -70,43 +76,78 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
             if (is_subclass_of($parameterClass, EndpointParamSpecification::class)) {
                 /** @var EndpointParamSpecification $param */
                 $param = $reflectionParamClass->newInstanceWithoutConstructor();
-                if ($param->getAvailableParamPaths()->searchUrlQueryParamPath()) {
-                    $allParams[UrlQueryParamPath::class][] = $param;
-                } elseif($param->getAvailableParamPaths()->searchJsonBodyParamPath()) {
-                    $allParams[JsonBodyParamPath::class][] = $param;
+                if ($paramPath = $param->getAvailableParamPaths()->searchUrlQueryParamPath()) {
+                    $allParams[UrlQueryParamPath::class][] = [$paramPath, $param];
+                } elseif($paramPath = $param->getAvailableParamPaths()->searchJsonBodyParamPath()) {
+                    $allParams[JsonBodyParamPath::class][] = [$paramPath, $param];
+                } elseif($paramPath = $param->getAvailableParamPaths()->searchMultipartBodyParamPath()) {
+                    $allParams[MultipartBodyParamPath::class][] = [$paramPath, $param];
                 }
             }
         }
-
         return $allParams;
     }
 
-    /**
-     * @param EndpointParamSpecification[] $params
-     */
-    private function buildJsonParamTree(array $params): array
+    private function describeParameters(\OpenApi\Annotations\AbstractAnnotation $operation, string $in, array ...$paramsWithPath): void
     {
-        $paths = [];
-        foreach ($params as $param) {
-            $paths[] = $param->getAvailableParamPaths()->searchJsonBodyParamPath()->formatPathToDoc($param);
+        $describedUrlQueryParams = [];
+        foreach ($this->buildTreeOfParams(...$paramsWithPath) as $name => $param) {
+            $describedUrlQueryParams[] = Util::createChild($operation, Parameter::class, [
+                'in' => $in,
+                'name' => $name,
+                'required' => $this->isRequiredParam($param),
+                'example' => $param->getExample(),
+            ]);
         }
-
-        return array_merge_recursive(...$paths);
+        $operation->merge($describedUrlQueryParams);
     }
 
-    private function describeJsonRequestBody(array $jsonParamTree, \OpenApi\Annotations\AbstractAnnotation $operation): void
+    private function isRequiredParam(EndpointParamSpecification $value): bool
     {
+        return !empty(array_filter($value->getParamConstraints()->toArray(), function ($constraint) {
+            return $constraint instanceof Constraints\NotBlank;
+        }));
+    }
+
+    private function buildTreeOfParams(array ...$paramsWithPath): array
+    {
+        $paramsByPath = [];
+        foreach ($paramsWithPath as [$paramPath, $param]) {
+            $formattedPath = $paramPath->formatPathToDoc();
+            if (is_string($formattedPath)) {
+                $paramByPath = [$formattedPath => $param];
+            } else {
+                $paramByPath = [];
+                $treeCursor = &$paramByPath;
+                $path = $formattedPath;
+                $lastPathItem = array_pop($path);
+                foreach ($path as $item) {
+                    $treeCursor[$item] ??= [];
+                    $treeCursor = &$treeCursor[$item];
+                }
+                $treeCursor[$lastPathItem] = $param;
+            }
+
+            $paramsByPath[] = $paramByPath;
+        }
+
+        return array_merge_recursive(...$paramsByPath);
+    }
+
+    private function describeJsonRequestBody(\OpenApi\Annotations\AbstractAnnotation $operation, array ...$paramsWithJsonBodyPath): void
+    {
+        $paramTree = $this->buildTreeOfParams(...$paramsWithJsonBodyPath);
         $requestBody = Util::getChild($operation, RequestBody::class);
         /**
          * getChild is not possible because it does not support inherited classes like JsonContent
          * @see RequestBody::$_nested
          */
         $content = Util::createChild($requestBody, JsonContent::class, [
-            'required' => $this->getRequiredChildren($jsonParamTree),
+            'required' => $this->getRequiredJsonChildren($paramTree),
         ]);
         $requestBody->merge([$content]);
 
-        $this->describeJsonParamTree($jsonParamTree, $content);
+        $this->describeJsonParamTree($paramTree, $content);
     }
 
     private function describeJsonParamTree(array $tree, \OpenApi\Annotations\AbstractAnnotation $parentItem): void
@@ -115,7 +156,7 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
         foreach ($tree as $treeKey => $treeValue) {
             if (is_array($treeValue)) {
                 $propertyAsObject = Util::createChild($parentItem, Property::class, [
-                    'required' => $this->getRequiredChildren($treeValue),
+                    'required' => $this->getRequiredJsonChildren($treeValue),
                     'property' => $treeKey,
                     'type' => 'object',
                 ]);
@@ -131,18 +172,12 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
         $parentItem->merge($properties);
     }
 
-    private function getRequiredChildren(array $jsonParamTree): array
+    private function getRequiredJsonChildren(array $jsonParamTree): array
     {
         $requiredChildren = [];
         foreach ($jsonParamTree as $key => $value) {
-            if ($value instanceof EndpointParamSpecification) {
-                $isOptional = empty(array_filter($value->getParamConstraints()->toArray(), function ($constraint) {
-                    return $constraint instanceof Constraints\NotBlank;
-                }));
-
-                if ($isOptional) {
-                    continue;
-                }
+            if ($value instanceof EndpointParamSpecification && !$this->isRequiredParam($value)) {
+                continue;
             }
 
             $requiredChildren[] = $key;
@@ -150,7 +185,7 @@ final class HttpEndpointDescriber implements RouteDescriberInterface
         return $requiredChildren;
     }
 
-    public function describeParamValue($paramExample, \OpenApi\Annotations\AbstractAnnotation $parentItem, ?string $treeKey = null): \OpenApi\Annotations\AbstractAnnotation
+    private function describeParamValue($paramExample, \OpenApi\Annotations\AbstractAnnotation $parentItem, ?string $treeKey = null): \OpenApi\Annotations\AbstractAnnotation
     {
         $childPropertyNameSection = $treeKey ? ['property' => $treeKey] : [];
         $childClass = $treeKey ? Property::class : Items::class;

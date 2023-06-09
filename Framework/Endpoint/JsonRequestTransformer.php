@@ -12,13 +12,11 @@ final class JsonRequestTransformer
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-
-        try {
-            $json = json_decode($request->getContent(), false, flags: JSON_THROW_ON_ERROR);
-        } catch (\JsonException) {
+        if ($request->getContentTypeFormat() !== 'json') {
             return;
         }
 
+        $json = json_decode($request->getContent(), false, flags: JSON_THROW_ON_ERROR);
         $request->attributes->add([self::REQUEST_ATTRIBUTE_JSON_CONTENT => new NullSafeObject($json)]);
     }
 }
