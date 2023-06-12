@@ -11,6 +11,7 @@ use Framework\Endpoint\EndpointInput\FoundInput;
 use Framework\Endpoint\EndpointInput\FoundInputParam;
 use Framework\Endpoint\EndpointInput\IgnoredInput;
 use Framework\Endpoint\EndpointInput\JsonBodyParamPath;
+use Framework\Endpoint\EndpointInput\MultipartBodyParamPath;
 use Framework\Endpoint\EndpointInput\ParsedInput;
 use Framework\Endpoint\EndpointInput\UrlQueryParamPath;
 use Framework\Endpoint\EndpointParamSpecification\EndpointParamSpecification;
@@ -67,7 +68,11 @@ final class EndpointInitializer
     {
         $foundInput = new FoundInput(...array_merge(
             $this->getFoundUrlQueryParams($request),
-            $this->getFoundJsonBodyParams($request),
+            match ($request->getContentTypeFormat()) {
+                'form' => $this->getFoundMultipartBodyParams($request),
+                'json' => $this->getFoundJsonBodyParams($request),
+                default => [],
+            },
         ));
         return $this->parseInput($foundInput, $expectedInput);
     }
@@ -79,6 +84,20 @@ final class EndpointInitializer
         foreach ($request->query->all() as $paramName => $paramValue) {
             $params[] = new FoundInputParam(
                 new UrlQueryParamPath($paramName),
+                $paramValue,
+            );
+        }
+
+        return $params;
+    }
+
+    private function getFoundMultipartBodyParams(Request $request): array
+    {
+        $params = [];
+
+        foreach ($request->request->all() as $paramName => $paramValue) {
+            $params[] = new FoundInputParam(
+                new MultipartBodyParamPath($paramName),
                 $paramValue,
             );
         }
