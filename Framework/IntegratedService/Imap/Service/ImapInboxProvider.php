@@ -9,22 +9,22 @@ final class ImapInboxProvider
     private Mailbox $mailbox;
 
     public function __construct(
-        private ImapCredentialsProvider $imapCredentials
+        private readonly ImapCredentialsProvider $imapCredentials
     )
     {
     }
 
-    public function getInbox(): Mailbox
+    public function getMailbox(): Mailbox
     {
         return $this->mailbox ??= $this->buildInbox();
     }
 
-    public function buildInbox(): Mailbox
+    private function buildInbox(): Mailbox
     {
         $mailbox = new Mailbox(
-            '{' . $this->imapCredentials->getHost() . ':993/imap/ssl}INBOX',
-            $this->imapCredentials->getLogin(),
-            $this->imapCredentials->getPassword(),
+            '{' . $this->imapCredentials->host . ':993/imap/ssl}INBOX',
+            $this->imapCredentials->login,
+            $this->imapCredentials->password,
         );
         $mailbox->setAttachmentsIgnore(true);
         return $mailbox;

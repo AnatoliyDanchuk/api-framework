@@ -8,28 +8,13 @@ namespace Framework\IntegratedService\Imap\Service;
  * ProxyManager\Exception\InvalidProxiedClassException : Provided class
  * "Framework\IntegratedService\Imap\Service\ImapCredentialsProvider" is final and cannot be proxied
  */
-class ImapCredentialsProvider
+readonly class ImapCredentialsProvider
 {
     public function __construct(
-        private string $host,
-        private string $login,
-        private string $password,
+        public string $host,
+        public string $login,
+        public string $password,
     )
     {
-    }
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getLogin(): string
-    {
-        return $this->login;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
     }
 }
