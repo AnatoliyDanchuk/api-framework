@@ -7,13 +7,15 @@ namespace Framework\IntegratedService\Imap\Service;
  * This class is not final because error will be:
  * ProxyManager\Exception\InvalidProxiedClassException : Provided class
  * "Framework\IntegratedService\Imap\Service\ImapCredentialsProvider" is final and cannot be proxied
+ * @readonly
+ * Cannot generate lazy proxy: class "Framework\IntegratedService\Imap\Service\ImapCredentialsProvider" is readonly.
  */
-readonly class ImapCredentialsProvider
+class ImapCredentialsProvider
 {
     public function __construct(
-        public string $host,
-        public string $login,
-        public string $password,
+        public readonly string $host,
+        public readonly string $login,
+        public readonly string $password,
     )
     {
     }
